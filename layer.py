@@ -6,8 +6,7 @@ from math import sqrt
 
 class Layer:
 
-    def __init__(self, m_max: int):
-        self.m_max = m_max
+    def __init__(self):
         self.nodes: dict[str, list[float]] = {}
         self.edges: dict[str, list[str]] = {}
 
@@ -31,7 +30,7 @@ class Layer:
 
     def _get_furthest(self, query: list[float], nodes: Iterable[str]) -> str:
 
-        furthest = ("", sys.float_info.min)
+        furthest = ("", -sys.float_info.max)
 
         for node in nodes:
 

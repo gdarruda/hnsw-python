@@ -5,26 +5,23 @@ from layer import Layer
 
 class HNSW:
 
-    def __init__(self, m_max: int, ef_construction: int):
+    def __init__(self, m_max: int, ef_construction: int, m_l: float):
         self.layers: list[Layer] = []
         self.m_max = m_max
+        self.m_l = m_l
         self.ef_construction = ef_construction
         self.entrypoint: str | None = None
 
-    @staticmethod
-    def _get_level() -> int:
-        p = np.random.randint(0, 2)
-        return 1 + HNSW._get_level() if p == 1 else 0
+    def _get_level(self) -> int:
+        return int(np.floor(-np.log(np.random.uniform()) * self.m_l))
 
     def _create_layer(self):
-
-        layer = Layer(self.m_max)
-        self.layers.append(layer)
+        self.layers.append(Layer())
 
     def insert(self, key: str, value: list[float]):
 
         max_level = len(self.layers) - 1
-        level = HNSW._get_level()
+        level = self._get_level()
 
         while max_level < level:
             self._create_layer()
@@ -60,6 +57,6 @@ class HNSW:
                             layer.select_neighbors(
                                 layer.get_value(key),
                                 neighbor_neighbors,
-                                layer.m_max,
+                                self.m_max,
                             ),
                         )

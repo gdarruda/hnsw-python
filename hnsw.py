@@ -60,3 +60,29 @@ class HNSW:
                                 self.m_max,
                             ),
                         )
+
+    def search(
+        self, query: list[float], k: int, ef_search: int
+    ) -> list[tuple[str, list[float]]]:
+
+        if self.entrypoint is None:
+            return []
+
+        entrypoint = self.entrypoint
+
+        for layer in reversed(self.layers):
+            keys = layer.search(query, ef_search, entrypoint)
+            entrypoint, _ = min(
+                [(key, Layer.distance(query, layer.nodes[key])) for key in keys],
+                key=lambda x: x[1],
+            )
+
+        layer, *_ = self.layers
+        keys = layer.search(query, ef_search, entrypoint)
+
+        k_keys = sorted(
+            [(key, Layer.distance(query, layer.nodes[key])) for key in keys],
+            key=lambda x: x[1],
+        )[:k]
+
+        return [(key, layer.nodes[key]) for key, _ in k_keys]

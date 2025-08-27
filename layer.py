@@ -11,7 +11,7 @@ class Layer:
         self.edges: dict[str, list[str]] = {}
 
     @staticmethod
-    def _distance(x: list[float], y: list[float]) -> float:
+    def distance(x: list[float], y: list[float]) -> float:
         return sqrt(sum([(x - y) ** 2 for x, y in zip(x, y)]))
 
     def _get_nearest(self, query: list[float], nodes: Iterable[str]) -> str:
@@ -20,7 +20,7 @@ class Layer:
 
         for node in nodes:
 
-            node_distance = Layer._distance(query, self.nodes[node])
+            node_distance = Layer.distance(query, self.nodes[node])
             _, smaller_distance = nearest
 
             if node_distance < smaller_distance:
@@ -34,7 +34,7 @@ class Layer:
 
         for node in nodes:
 
-            node_distance = Layer._distance(query, self.nodes[node])
+            node_distance = Layer.distance(query, self.nodes[node])
             _, bigger_distance = furthest
 
             if node_distance > bigger_distance:
@@ -65,7 +65,7 @@ class Layer:
 
         best_candidates = sorted(
             [
-                (Layer._distance(v, self.nodes[c]), c)
+                (Layer.distance(v, self.nodes[c]), c)
                 for v, c in product([value], candidates)
             ],
             key=lambda x: x[0],
@@ -88,7 +88,7 @@ class Layer:
 
             furthest_node = self._get_furthest(query, nearest_neighbors)
 
-            if Layer._distance(query, self.nodes[nearest_node]) > Layer._distance(
+            if Layer.distance(query, self.nodes[nearest_node]) > Layer.distance(
                 query, self.nodes[furthest_node]
             ):
                 break
@@ -101,8 +101,8 @@ class Layer:
                     furthest_element = self._get_furthest(query, nearest_neighbors)
 
                     if (
-                        Layer._distance(query, self.nodes[node])
-                        < Layer._distance(query, self.nodes[furthest_element])
+                        Layer.distance(query, self.nodes[node])
+                        < Layer.distance(query, self.nodes[furthest_element])
                         or len(nearest_neighbors) < elements_to_return
                     ):
 

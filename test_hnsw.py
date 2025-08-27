@@ -26,7 +26,7 @@ def test_create_layer(hnsw: HNSW):
 def test_insert(hnsw: HNSW):
 
     num_samples = 1_000
-    samples = np.random.rand(1_000, 3).tolist()
+    samples = np.random.rand(num_samples, 3).tolist()
 
     for sample in samples:
         hnsw.insert(str(uuid.uuid4()), sample)
@@ -45,3 +45,16 @@ def test_insert(hnsw: HNSW):
         for key, values in layer.edges.items():
             assert key not in values
             assert 0 <= len(values) <= 5
+
+
+def test_search(hnsw: HNSW):
+
+    num_samples = 1_000
+    samples = np.random.rand(num_samples, 3).tolist()
+
+    for sample in samples:
+        hnsw.insert(str(uuid.uuid4()), sample)
+
+    values = hnsw.search(np.random.rand(3).tolist(), 5, 5)
+
+    assert len(values) == 5

@@ -1,6 +1,6 @@
 import numpy as np
 
-from layer import Layer
+from src.layer import Layer
 
 
 class HNSW:
@@ -27,7 +27,7 @@ class HNSW:
             self._create_layer()
             max_level = len(self.layers) - 1
 
-        entrypoint = self.entrypoint
+        entrypoint: str = self.entrypoint
 
         for level in reversed(range(level, max_level)):
             entrypoint, *_ = self.layers[level].search(value, 1, entrypoint)

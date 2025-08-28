@@ -3,7 +3,7 @@ import uuid
 import numpy as np
 import pytest
 
-from hnsw import HNSW
+from src.hnsw import HNSW
 
 
 @pytest.fixture

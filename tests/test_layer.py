@@ -2,7 +2,7 @@ import math
 
 import pytest
 
-from layer import Layer
+from src.layer import Layer
 
 
 @pytest.fixture
@@ -26,7 +26,7 @@ def test_distance(layer: Layer):
     y = [2.0, 3.0]
 
     expected = 2.2360679775
-    assert math.isclose(expected, layer._distance(x, y))
+    assert math.isclose(expected, layer.distance(x, y))
 
 
 def test_get_nearest(layer: Layer):

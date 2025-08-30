@@ -5,9 +5,10 @@ from src.layer import Layer
 
 class HNSW:
 
-    def __init__(self, m_max: int, ef_construction: int, m_l: float):
+    def __init__(self, m_max: int, m_max0: int, ef_construction: int, m_l: float):
         self.layers: list[Layer] = []
         self.m_max = m_max
+        self.m_max0 = m_max0
         self.m_l = m_l
         self.ef_construction = ef_construction
         self.entrypoint: str | None = None
@@ -51,13 +52,15 @@ class HNSW:
                     layer.connect(key, neighbor)
                     neighbor_neighbors = layer.get_neighbors(neighbor)
 
-                    if len(neighbor_neighbors) > self.m_max:
+                    m_max = self.m_max0 if level == 0 else self.m_max
+
+                    if len(neighbor_neighbors) > m_max:
                         layer.set_neighbors(
                             neighbor,
                             layer.select_neighbors(
                                 layer.get_value(key),
                                 neighbor_neighbors,
-                                self.m_max,
+                                m_max,
                             ),
                         )
 

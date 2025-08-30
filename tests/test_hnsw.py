@@ -8,7 +8,7 @@ from src.hnsw import HNSW
 
 @pytest.fixture
 def hnsw():
-    return HNSW(5, 3, 1.0)
+    return HNSW(5, 5, 3, 1.0)
 
 
 def test_get_level(hnsw: HNSW):

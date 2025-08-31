@@ -73,9 +73,58 @@ class Layer:
 
         return [c for _, c in best_candidates]
 
+    def select_neighbors_heuristic(
+        self,
+        value: list[float],
+        candidates: list[str],
+        m: int,
+        extend_candidates: bool,
+        keep_pruned_connections: bool,
+    ) -> list[str]:
+
+        neighbors = set([])
+        working_candidates = set(candidates)
+
+        if extend_candidates:
+            for candidate in candidates:
+                for candidate_neighbor in self.edges[candidate]:
+                    if candidate_neighbor not in working_candidates:
+                        working_candidates.add(candidate_neighbor)
+
+        discarded_candidates = set([])
+
+        while len(working_candidates) > 0 and len(neighbors) < m:
+
+            nearest_wc = self._get_nearest(value, working_candidates)
+            working_candidates.remove(nearest_wc)
+
+            nearest_wc_distance = self.distance(self.nodes[nearest_wc], value)
+
+            add_candidate = bool(
+                sum(
+                    [
+                        nearest_wc_distance < self.distance(value, self.nodes[neighbor])
+                        for neighbor in neighbors
+                    ]
+                )
+            )
+
+            if add_candidate or len(neighbors) == 0:
+                neighbors.add(nearest_wc)
+            else:
+                discarded_candidates.add(nearest_wc)
+
+        if keep_pruned_connections:
+            while len(discarded_candidates) > 0 and len(neighbors) < m:
+                nearest_candidate = self._get_nearest(value, discarded_candidates)
+                discarded_candidates.remove(nearest_candidate)
+                neighbors.add(nearest_candidate)
+
+        return list(neighbors)
+
     def search(
         self, query: list[float], elements_to_return: int, entrypoint: str
-    ) -> Iterable[str]:
+    ) -> list[str]:
 
         visted = set([entrypoint])
         candidates = set([entrypoint])
@@ -112,4 +161,4 @@ class Layer:
                         if len(nearest_neighbors) > elements_to_return:
                             nearest_neighbors.remove(furthest_element)
 
-        return nearest_neighbors
+        return list(nearest_neighbors)

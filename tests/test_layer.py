@@ -83,6 +83,25 @@ def test_select_neighbors(layer: Layer):
     ]
 
 
+def test_select_neighbors_test(layer: Layer):
+
+    layer.connect("a", "b")
+    layer.connect("b", "e")
+    layer.connect("d", "c")
+    layer.connect("b", "c")
+
+    neighbors = layer.select_neighbors_heuristic(
+        [1.1, 1.1],
+        ["a", "b", "c", "d"],
+        2,
+        extend_candidates=True,
+        keep_pruned_connections=True,
+    )
+
+    assert "a" in neighbors
+    assert "b" in neighbors
+
+
 def test_search(layer: Layer):
 
     layer.connect("a", "b")

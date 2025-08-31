@@ -41,8 +41,8 @@ class HNSW:
             if len(layer.nodes) == 1:
                 self.entrypoint = key
             else:
-                neighbors = layer.select_neighbors(
-                    value,
+                neighbors = layer.select_neighbors_heuristic(
+                    key,
                     layer.search(value, self.ef_construction, entrypoint),
                     self.m_max,
                 )
@@ -58,7 +58,7 @@ class HNSW:
                         layer.set_neighbors(
                             neighbor,
                             layer.select_neighbors(
-                                layer.get_value(key),
+                                neighbor,
                                 neighbor_neighbors,
                                 m_max,
                             ),

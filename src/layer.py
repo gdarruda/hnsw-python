@@ -56,17 +56,19 @@ class Layer:
         self.edges[key] = []
 
     def connect(self, x: str, y: str):
+
         self.edges[x].append(y)
         self.edges[y].append(x)
 
-    def select_neighbors(
-        self, value: list[float], candidates: list[str], m: int
-    ) -> list[str]:
+    def select_neighbors(self, key: str, candidates: list[str], m: int) -> list[str]:
+
+        value = self.nodes[key]
 
         best_candidates = sorted(
             [
                 (Layer.distance(v, self.nodes[c]), c)
                 for v, c in product([value], candidates)
+                if c != key
             ],
             key=lambda x: x[0],
         )[:m]
@@ -75,20 +77,24 @@ class Layer:
 
     def select_neighbors_heuristic(
         self,
-        value: list[float],
+        key: str,
         candidates: list[str],
         m: int,
-        extend_candidates: bool,
-        keep_pruned_connections: bool,
+        extend_candidates: bool = True,
+        keep_pruned_connections: bool = True,
     ) -> list[str]:
 
+        value = self.nodes[key]
         neighbors = set([])
-        working_candidates = set(candidates)
+        working_candidates = set([c for c in candidates if c != key])
 
         if extend_candidates:
             for candidate in candidates:
                 for candidate_neighbor in self.edges[candidate]:
-                    if candidate_neighbor not in working_candidates:
+                    if (
+                        candidate_neighbor not in working_candidates
+                        and candidate_neighbor != key
+                    ):
                         working_candidates.add(candidate_neighbor)
 
         discarded_candidates = set([])

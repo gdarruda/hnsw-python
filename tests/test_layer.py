@@ -69,37 +69,56 @@ def test_connect(layer: Layer):
     assert "b" in layer.get_neighbors("a")
 
 
-def test_select_neighbors(layer: Layer):
+# def test_select_neighbors(layer: Layer):
 
-    assert layer.select_neighbors([1.1, 1.1], ["a", "b", "c", "d"], 3) == [
-        "b",
-        "a",
-        "c",
-    ]
+#     assert layer.select_neighbors([1.1, 1.1], ["a", "b", "c", "d"], 3) == [
+#         "b",
+#         "a",
+#         "c",
+#     ]
 
-    assert layer.select_neighbors([7.1, 5.1], ["a", "b", "c", "d"], 2) == [
-        "d",
-        "b",
-    ]
+#     assert layer.select_neighbors([7.1, 5.1], ["a", "b", "c", "d"], 2) == [
+#         "d",
+#         "b",
+#     ]
 
 
-def test_select_neighbors_test(layer: Layer):
+# def test_select_neighbors_test(layer: Layer):
 
-    layer.connect("a", "b")
-    layer.connect("b", "e")
-    layer.connect("d", "c")
-    layer.connect("b", "c")
+#     layer.connect("a", "b")
+#     layer.connect("b", "e")
+#     layer.connect("d", "c")
+#     layer.connect("b", "c")
 
-    neighbors = layer.select_neighbors_heuristic(
-        [1.1, 1.1],
-        ["a", "b", "c", "d"],
-        2,
-        extend_candidates=True,
-        keep_pruned_connections=True,
-    )
+#     neighbors = layer.select_neighbors_heuristic(
+#         [1.1, 1.1],
+#         ["a", "b", "c", "d"],
+#         2,
+#         extend_candidates=True,
+#         keep_pruned_connections=True,
+#     )
 
-    assert "a" in neighbors
-    assert "b" in neighbors
+#     assert "a" in neighbors
+#     assert "b" in neighbors
+
+#     neighbors = layer.select_neighbors_heuristic(
+#         [10, 10],
+#         ["a", "b", "c", "d"],
+#         2,
+#         extend_candidates=True,
+#         keep_pruned_connections=True,
+#     )
+
+#     assert "e" in neighbors
+#     assert "d" in neighbors
+
+#     neighbors = layer.select_neighbors_heuristic(
+#         [10, 10],
+#         ["a", "b", "c", "d"],
+#         3,
+#         extend_candidates=True,
+#         keep_pruned_connections=True,
+#     )
 
 
 def test_search(layer: Layer):

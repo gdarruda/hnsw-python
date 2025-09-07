@@ -57,7 +57,7 @@ class HNSW:
                     if len(neighbor_neighbors) > m_max:
                         layer.set_neighbors(
                             neighbor,
-                            layer.select_neighbors(
+                            layer.select_neighbors_heuristic(
                                 neighbor,
                                 neighbor_neighbors,
                                 m_max,

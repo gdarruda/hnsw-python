@@ -56,7 +56,6 @@ class Layer:
         self.edges[key] = []
 
     def connect(self, x: str, y: str):
-
         self.edges[x].append(y)
         self.edges[y].append(x)
 
@@ -71,9 +70,9 @@ class Layer:
                 if c != key
             ],
             key=lambda x: x[0],
-        )[:m]
+        )
 
-        return [c for _, c in best_candidates]
+        return [c for _, c in best_candidates][:m]
 
     def select_neighbors_heuristic(
         self,
